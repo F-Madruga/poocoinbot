@@ -1,4 +1,5 @@
 CHROMEDRIVER_PATH = '/home/madruga/.selinium/chromedriver'
+MAKE_SOUND = True
 SOUND = '/usr/share/sounds/freedesktop/stereo/phone-incoming-call.oga'
 BRAVE = True
 BROWSER_PATH = '/usr/bin/brave-browser'

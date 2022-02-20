@@ -4,7 +4,7 @@ from constants import CHROMEDRIVER_PATH, POOCOIN_URL, BRAVE, PANCAKESWAP_URL, RE
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from utils import change_tab, hasXpath, open_new_tab
-import os
+import pygame
 from coin import Coin
 import pandas as pd
 
@@ -42,7 +42,15 @@ class Bot():
             'PROFIT': [],
             'STATUS': []
         }
-        for coin in self.coins:
+        coins_to_sell = {
+            'COIN': [],
+            'AMOUNT': [],
+            'ENTRY_VALUE ($)': [],
+            'VALUE ($)': [],
+            'PROFIT': [],
+            'STATUS': []
+        }
+        for i, coin in enumerate(self.coins):
             coin.update_value(self.driver)
             coin.update_profit()
             coins_dict['COIN'].append(coin.name)
@@ -56,6 +64,14 @@ class Bot():
             coins_dict['PROFIT'].append(
                 np.format_float_positional(coin.profit))
             coins_dict['STATUS'].append(coin.get_status())
+            if coins_dict['STATUS'][i] != 'HOLD':
+                coins_to_sell['COIN'].append(coins_dict['COIN'][i])
+                coins_to_sell['AMOUNT'].append(coins_dict['AMOUNT'][i])
+                coins_to_sell['ENTRY_VALUE ($)'].append(
+                    coins_dict['ENTRY_VALUE ($)'][i])
+                coins_to_sell['VALUE ($)'].append(coins_dict['VALUE ($)'][i])
+                coins_to_sell['PROFIT'].append(coins_dict['PROFIT'][i])
+                coins_to_sell['STATUS'].append(coins_dict['STATUS'][i])
         print(pd.DataFrame(coins_dict).to_string(index=False))
 
     def got_to_pancakeswap(self):
